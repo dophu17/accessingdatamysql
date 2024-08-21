@@ -4,6 +4,7 @@ import com.example.accessingdatamysql.models.User;
 import com.example.accessingdatamysql.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,26 +20,23 @@ public class UserController {
     }
 
     @PostMapping(path = "/add")
-    public User addNewUser (@RequestParam String name, @RequestParam String email) {
-        User user = new User();
-        user.setName(name);
-        user.setEmail(email);
-        userRepository.save(user);
-        return user;
+    public ResponseEntity<User> addNewUser (User user) {
+        User newUser = userRepository.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
     @PutMapping(path = "/update/{id}")
-    public User updateUser (@PathVariable int id, @RequestParam String name, @RequestParam String email) {
+    public ResponseEntity<User> updateUser (@PathVariable int id, @RequestParam String name, @RequestParam String email) {
         User user = userRepository.findById(id).get();
         user.setName(name);
         user.setEmail(email);
         userRepository.save(user);
-        return user;
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     @DeleteMapping(path="/delete/{id}")
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteUser (@PathVariable int id) {
+    public ResponseEntity<String> deleteUser (@PathVariable int id) {
         userRepository.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Deleted");
     }
 }

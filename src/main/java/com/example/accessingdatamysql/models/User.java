@@ -1,11 +1,9 @@
 package com.example.accessingdatamysql.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity // This tells Hibernate to make a table out of this class
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -14,6 +12,16 @@ public class User {
     private String name;
 
     private String email;
+
+    public User() {
+        // TODO Auto-generated constructor stub
+    }
+
+    public User(Integer id, String name, String email) {
+        super();
+        this.name = name;
+        this.email = email;
+    }
 
     public Integer getId() {
         return id;
